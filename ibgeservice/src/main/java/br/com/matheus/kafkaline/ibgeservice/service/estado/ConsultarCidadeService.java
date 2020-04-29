@@ -7,6 +7,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.header.internals.RecordHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.kafka.requestreply.ReplyingKafkaTemplate;
 import org.springframework.kafka.requestreply.RequestReplyFuture;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -32,7 +33,8 @@ public class ConsultarCidadeService {
 	//fila que vai ser aguardado a resposta
     @Value("${kafka.topic.requestreply-topic-cidade}")
     private String requestReplyTopic;
-	
+    
+    @Cacheable(value = "cidade-principal")
 	public CidadeList execute(String estado) throws JsonProcessingException, ExecutionException, InterruptedException {
 
         long tempoInicial = System.currentTimeMillis();

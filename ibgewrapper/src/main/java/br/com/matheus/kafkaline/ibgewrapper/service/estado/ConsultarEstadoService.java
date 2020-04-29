@@ -2,6 +2,7 @@ package br.com.matheus.kafkaline.ibgewrapper.service.estado;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import br.com.matheus.kafkaline.ibgewrapper.gateway.feing.EstadoClient;
@@ -11,7 +12,7 @@ import feign.gson.GsonDecoder;
 
 @Service
 public class ConsultarEstadoService {
-	
+	@Cacheable(value = "estado")
 	public List<EstadoJson> execute() {
 		long tempoInicial = System.currentTimeMillis();
 
@@ -21,7 +22,7 @@ public class ConsultarEstadoService {
 		
 		List<EstadoJson> list = estadoCliente.get();
 		
-		System.out.printf("%,3f ms%n",(System.currentTimeMillis()-tempoInicial)/1000d);
+		System.out.printf("Tempo de execução Service Estado: %,3f ms%n",(System.currentTimeMillis()-tempoInicial)/1000d);
 		
 		return list;
 	}

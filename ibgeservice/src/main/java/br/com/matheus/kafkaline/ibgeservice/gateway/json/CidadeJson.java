@@ -1,5 +1,7 @@
 package br.com.matheus.kafkaline.ibgeservice.gateway.json;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
@@ -10,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CidadeJson {
+public class CidadeJson implements Serializable{
 	private Long id;
 	private String nome;
 

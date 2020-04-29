@@ -7,7 +7,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.Header;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +21,7 @@ import br.com.matheus.kafkaline.ibgewrapper.service.estado.ConsultarEstadoServic
 public class EstadoListener {
 	@Autowired
 	private ConsultarEstadoService consultarEstadosService;
+	
 	@KafkaListener(topics="${kafka.topic.request-topic}")
 	public Message<String> execute(@Header(KafkaHeaders.REPLY_TOPIC) byte[] replyTo,
             @Header(KafkaHeaders.CORRELATION_ID) byte[] correlation) throws JsonProcessingException {
@@ -31,7 +31,7 @@ public class EstadoListener {
 		List<EstadoJson> listEstados = consultarEstadosService.execute();
 		
 		String jsonReturn = mapper.writeValueAsString(EstadoList.builder().list(listEstados).build());
-		System.out.printf("%,3f ms%n",(System.currentTimeMillis()-tempoInicial)/1000d);
+		System.out.printf("Tempo de execução Listener Estado: %,3f ms%n",(System.currentTimeMillis()-tempoInicial)/1000d);
 		return MessageBuilder.withPayload(jsonReturn)
 				.setHeader(KafkaHeaders.TOPIC, replyTo)
 				.setHeader(KafkaHeaders.CORRELATION_ID, correlation)
